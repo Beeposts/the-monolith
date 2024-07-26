@@ -11,17 +11,17 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Directory.Packages.props", "."]
 COPY ["Directory.Build.props", "."]
-COPY ["Host.Api/Api.csproj", "Host.Api/"]
-RUN dotnet restore "./Host.Api/Api.csproj"
+COPY ["IdentityServer/IdentityServer.csproj", "IdentityServer/"]
+RUN dotnet restore "./IdentityServer/IdentityServer.csproj"
 COPY . .
-WORKDIR "/src/Host.Api"
-RUN dotnet build "./Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/IdentityServer"
+RUN dotnet build "./IdentityServer.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./IdentityServer.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Api.dll"]
+ENTRYPOINT ["dotnet", "IdentityServer.dll"]
