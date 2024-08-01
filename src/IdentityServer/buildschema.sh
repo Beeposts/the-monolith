@@ -1,5 +1,5 @@
 #!/bin/bash
 
-rm -rf "Data/Migrations"
+rm -rf "../Shared/Databases/Migrations/Identity"
 
-dotnet ef migrations add Users -c ApplicationDbContext -o Data/Migrations
+dotnet ef migrations add Users -p ../Shared/ -s . -c IdentityAppDbContext -o ../Shared/Databases/Migrations/Identity

@@ -1,16 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using IdentityServer.Models;
+using Shared.Models;
 
-namespace IdentityServer.Data;
+namespace Shared.Databases;
 
-public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+public class IdentityAppDbContext(DbContextOptions<IdentityAppDbContext> options)
+    : IdentityDbContext<ApplicationUser>(options)
 {
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-        : base(options)
-    {
-    }
-
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);

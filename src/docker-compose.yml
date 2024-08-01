@@ -1,0 +1,30 @@
+version: "3.8" # Specify the Docker Compose version
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: monolith-db
+    environment:
+      POSTGRES_PASSWORD: monolith
+      POSTGRES_DB: monolith
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: monolith-pgadmin
+    depends_on:
+      - db
+    environment:
+      PGADMIN_DEFAULT_EMAIL: user@localhost.com
+      PGADMIN_DEFAULT_PASSWORD: password
+    ports:
+      - 8090:80
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+
+volumes:
+  postgres_data:
+  pgadmin:

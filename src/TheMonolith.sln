@@ -10,6 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0.SolutionItems", "0.Soluti
 		Directory.Build.props = Directory.Build.props
 		Directory.Packages.props = Directory.Packages.props
 		global.json = global.json
+		docker-compose.yml = docker-compose.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.Utilities", "1.Utilities", "{27EB8F71-9F14-4FED-9F7F-25AA8F70CB8E}"
@@ -61,5 +62,7 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6E348390-AEEE-48F3-B686-CAAD78452D17}
+	EndGlobalSection
+	GlobalSection(RiderSharedRunConfigurations) = postSolution
 	EndGlobalSection
 EndGlobal

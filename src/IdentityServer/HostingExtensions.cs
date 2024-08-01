@@ -1,9 +1,9 @@
 using Duende.IdentityServer;
-using IdentityServer.Data;
-using IdentityServer.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using Shared.Databases;
+using Shared.Models;
 
 namespace IdentityServer;
 
@@ -13,11 +13,11 @@ internal static class HostingExtensions
     {
         builder.Services.AddRazorPages();
 
-        builder.Services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+        builder.Services.AddDbContext<IdentityAppDbContext>(options =>
+            options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
         builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddEntityFrameworkStores<IdentityAppDbContext>()
             .AddDefaultTokenProviders();
 
         builder.Services

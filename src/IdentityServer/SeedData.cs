@@ -1,10 +1,10 @@
 ﻿using System.Security.Claims;
 using IdentityModel;
-using IdentityServer.Data;
-using IdentityServer.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using Shared.Databases;
+using Shared.Models;
 
 namespace IdentityServer;
 
@@ -14,7 +14,7 @@ public class SeedData
     {
         using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
         {
-            var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            var context = scope.ServiceProvider.GetRequiredService<IdentityAppDbContext>();
             context.Database.Migrate();
 
             var userMgr = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
@@ -27,7 +27,7 @@ public class SeedData
                     Email = "AliceSmith@email.com",
                     EmailConfirmed = true,
                 };
-                var result = userMgr.CreateAsync(alice, "Pass123$").Result;
+                    var result = userMgr.CreateAsync(alice, "Pass123$").Result;
                 if (!result.Succeeded)
                 {
                     throw new Exception(result.Errors.First().Description);
