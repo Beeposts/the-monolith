@@ -1,11 +1,15 @@
 using Api.Extensions;
+using Microsoft.OpenApi.Models;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 //the package Open Api will change how to configure in dotnet 9
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "The Monolith Api", Version = "v1" });
+});
 
 builder.Services.AddIdentityServer(builder.Configuration);
 builder.Services.AddAuthorization();
