@@ -22,3 +22,6 @@ logs
 .env
 .env.*
 !.env.example
+# dev certificates
+dev-certs
+.env

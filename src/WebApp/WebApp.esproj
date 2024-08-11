@@ -6,4 +6,7 @@
             <StartupCommand>pnpm run dev</StartupCommand>
             <PublishCommand>pnpm run build</PublishCommand>
         </PropertyGroup>
+        <ItemGroup>
+          <Folder Include="dev-certs\" />
+        </ItemGroup>
     </Project>

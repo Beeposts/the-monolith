@@ -2,7 +2,13 @@
 
 Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 
+
 ## Setup
+
+To generate local certs
+```bash
+dotnet dev-certs https --export-path ./dev-certs/localhost.pem --format Pem --no-password
+```
 
 Make sure to install the dependencies:
 
