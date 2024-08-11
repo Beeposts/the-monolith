@@ -8,13 +8,24 @@ public static class Config
         new IdentityResource[]
         {
             new IdentityResources.OpenId(),
-            new IdentityResources.Profile()
+            new IdentityResources.Profile(),
+            new IdentityResources.Email()
         };
 
     public static IEnumerable<ApiScope> ApiScopes =>
         new ApiScope[]
         {
             new ApiScope("api"),
+        };
+
+    public static IEnumerable<ApiResource> ApiResources =>
+        new ApiResource[]
+        {
+            new ApiResource
+            {
+                Name = "api",
+                Scopes = ApiScopes.Select(x => x.Name).ToList()
+            }
         };
 
     public static IEnumerable<Client> Clients =>
@@ -37,13 +48,11 @@ public static class Config
             {
                 ClientId = "interactive",
                 ClientSecrets = { new Secret("49C1A7E1-0C79-4A89-A3D6-A37998FB86B0".Sha256()) },
-
-                AllowedGrantTypes = GrantTypes.Code,
-
-                RedirectUris = { "https://localhost:44300/signin-oidc" },
-                FrontChannelLogoutUri = "https://localhost:44300/signout-oidc",
-                PostLogoutRedirectUris = { "https://localhost:44300/signout-callback-oidc" },
-
+                AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
+                RedirectUris = { "https://localhost:3000/auth/oidc/callback" },
+                PostLogoutRedirectUris = { "https://localhost:3000/" },
+                AllowAccessTokensViaBrowser = true,
+                AllowedCorsOrigins = {"https://localhost:3000"},
                 AllowOfflineAccess = true,
                 AllowedScopes = { "openid", "profile", "api" }
             },
