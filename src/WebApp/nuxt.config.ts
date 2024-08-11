@@ -3,8 +3,6 @@
 
 
 import { defineNuxtConfig } from 'nuxt/config'
-
-console.log("NODE_TLS_REJECT_UNAUTHORIZED", process.env.NODE_TLS_REJECT_UNAUTHORIZED)
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   sourcemap: true,
