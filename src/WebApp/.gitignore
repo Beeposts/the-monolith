@@ -25,3 +25,5 @@ logs
 # dev certificates
 dev-certs
 .env
+localhost-key.pem
+localhost.pem
