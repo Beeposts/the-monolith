@@ -1,6 +1,8 @@
+using Api;
 using Api.Extensions;
 using Microsoft.OpenApi.Models;
 using Scalar.AspNetCore;
+using Shared.Abstractions;
 using Shared.Modules;
 using Users;
 
@@ -17,7 +19,8 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddIdentityServer(builder.Configuration);
 builder.Services.AddAuthorization();
-
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IUserSession, UserSession>();
 builder.Services.AddModule<UserModule>()
     .RegisterModules(builder.Configuration, logger, mediatorAssemblies);
 
