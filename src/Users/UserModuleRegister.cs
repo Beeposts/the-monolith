@@ -1,5 +1,7 @@
 using System.Reflection;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
@@ -7,8 +9,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Shared.Abstractions;
+using Shared.Models;
 using Shared.Modules.Abstractions;
 using Users.Database;
+using Users.Middlewares;
 using Users.Services;
 
 namespace Users;
@@ -27,13 +31,16 @@ public class UserModule : IModuleRegister
         });
 
         services.AddScoped<ITenantSession, TenantSession>();
+        services.AddScoped<ITenantResolver, TenantResolver>();
         
         mediatorAssemblies.Add(typeof(UserModule).Assembly);
     }
 
     public void RegisterEndpoints(IEndpointRouteBuilder endpoints)
     {
-        endpoints.MapGet("users", () => "Hello from User endpoint");
+        endpoints.MapPost("users", ([AsParameters]Dummy request) => $"Hello from User endpoint {request.TenantSlug}")
+            .RequireAuthorization();
+
     }
 
     public void UseModule(IApplicationBuilder app)
@@ -41,5 +48,16 @@ public class UserModule : IModuleRegister
         using var scope = app.ApplicationServices.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<UserDbContext>();
         dbContext.Database.Migrate();
+
+
+        app.UseMiddleware<TenantResolverMiddleware>();
     }
 }
+
+public record Dummy : BaseTenantRequest
+{
+    [FromBody]
+    public People? Person { get; init; }
+}
+
+public record People(string Name, string Email);

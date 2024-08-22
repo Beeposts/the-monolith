@@ -24,15 +24,23 @@ builder.Services.AddScoped<IUserSession, UserSession>();
 builder.Services.AddModule<UserModule>()
     .RegisterModules(builder.Configuration, logger, mediatorAssemblies);
 
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options => {
+    options.Cookie.Name = ".TheMonolith.Session";
+    options.IdleTimeout = TimeSpan.FromMinutes(5);
+});
+
 var app = builder.Build();
 
 app.MapGet("/", () => "Hello World!")
     .WithOpenApi();
 
-app.RegisterEndpoints(logger);
 
+app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseModules(logger);
 
 app.UseSwagger(options =>
 {
@@ -41,7 +49,7 @@ app.UseSwagger(options =>
 
 app.MapScalarApiReference();
 
-app.UseModules(logger);
+app.RegisterEndpoints(logger);
 app.CleanModuleStartup();
 
 app.Run();
