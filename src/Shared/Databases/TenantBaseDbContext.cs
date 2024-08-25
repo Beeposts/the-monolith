@@ -49,7 +49,7 @@ public abstract class TenantBaseDbContext<TDbContext> : DbContext
         
         foreach (var entityType in modelBuilder.Model.GetEntityTypes().Where(x => typeof(TenantEntity<TPrimaryKey>).IsAssignableFrom(x.ClrType)))
         {
-            LambdaExpression lambda = (method
+            LambdaExpression lambda = (method?
                 .MakeGenericMethod(entityType.ClrType, typeof(TPrimaryKey))
                 .Invoke(this, null) as LambdaExpression)!;
 

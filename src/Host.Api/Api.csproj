@@ -26,11 +26,4 @@
     <ProjectReference Include="..\Users\Users.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageVersion Update="Mediator.SourceGenerator" Version="2.1.7">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageVersion>
-  </ItemGroup>
-
 </Project>

@@ -5,8 +5,10 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
+
     <ItemGroup>
-        <PackageReference Include="MediatR" />
+      <PackageReference Include="Ardalis.Result" />
+      <PackageReference Include="Mediator.Abstractions" />
     </ItemGroup>
 
 </Project>
