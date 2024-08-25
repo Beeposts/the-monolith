@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Mediator.SourceGenerator">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" />
@@ -20,6 +24,13 @@
   <ItemGroup>
     <ProjectReference Include="..\Shared\Shared.csproj" />
     <ProjectReference Include="..\Users\Users.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageVersion Update="Mediator.SourceGenerator" Version="2.1.7">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageVersion>
   </ItemGroup>
 
 </Project>

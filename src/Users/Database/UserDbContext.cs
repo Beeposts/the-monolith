@@ -5,7 +5,7 @@ using Users.Domain;
 
 namespace Users.Database;
 
-internal class UserDbContext(DbContextOptions<UserDbContext> options, IUserSession userSession, ITenantSession tenantSession) : TenantBaseDbContext<UserDbContext>(options, userSession, tenantSession)
+public class UserDbContext(DbContextOptions<UserDbContext> options, IUserSession userSession, ITenantSession tenantSession) : TenantBaseDbContext<UserDbContext>(options, userSession, tenantSession)
 {
     public DbSet<User> User { get; set; }
     public DbSet<Role> Role { get; set; }

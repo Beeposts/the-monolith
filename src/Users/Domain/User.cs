@@ -1,7 +1,7 @@
 using Shared.Domains;
 
 namespace Users.Domain;
-internal record User : Entity
+public record User : Entity
 {
     public required string IdentityId { get; set; }
     public string? Email { get; set; }

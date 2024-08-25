@@ -54,7 +54,7 @@ public static class Config
                 AllowAccessTokensViaBrowser = true,
                 AllowedCorsOrigins = {"https://localhost:3000"},
                 AllowOfflineAccess = true,
-                AllowedScopes = { "openid", "profile", "api" }
+                AllowedScopes = { "openid", "profile", "api" },
             },
         };
 }

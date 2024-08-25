@@ -19,8 +19,7 @@ namespace Users;
 
 public class UserModule : IModuleRegister
 {
-    public void RegisterServices(IServiceCollection services, IConfiguration configuration, ILogger logger,
-        List<Assembly> mediatorAssemblies)
+    public void RegisterServices(IServiceCollection services, IConfiguration configuration, ILogger logger)
     {
         logger.LogInformation("Registering User module services");
         var connectionString = configuration.GetConnectionString("DefaultConnection");
@@ -32,8 +31,7 @@ public class UserModule : IModuleRegister
 
         services.AddScoped<ITenantSession, TenantSession>();
         services.AddScoped<ITenantResolver, TenantResolver>();
-        
-        mediatorAssemblies.Add(typeof(UserModule).Assembly);
+        services.AddScoped<IUserSession, UserSession>();
     }
 
     public void RegisterEndpoints(IEndpointRouteBuilder endpoints)
@@ -50,6 +48,7 @@ public class UserModule : IModuleRegister
         dbContext.Database.Migrate();
 
 
+        app.UseMiddleware<UserSessionMiddleware>();
         app.UseMiddleware<TenantResolverMiddleware>();
     }
 }

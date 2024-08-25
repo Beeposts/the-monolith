@@ -1,7 +1,7 @@
 using Shared.Domains;
 
 namespace Users.Domain;
-internal record Tenant : Entity
+public record Tenant : Entity
 {
     public required string Name { get; set; }
     public required string Slug { get; set; }

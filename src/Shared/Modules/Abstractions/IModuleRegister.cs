@@ -8,7 +8,7 @@ namespace Shared.Modules.Abstractions;
 
 public interface IModuleRegister
 {
-    public void RegisterServices(IServiceCollection services, IConfiguration configuration, ILogger logger, List<System.Reflection.Assembly> mediatorAssemblies);
+    public void RegisterServices(IServiceCollection services, IConfiguration configuration, ILogger logger);
     public void RegisterEndpoints(IEndpointRouteBuilder endpoints);
     public void UseModule(IApplicationBuilder app);
     

@@ -8,7 +8,6 @@ using Users;
 
 var logger = LoggerFactory.Create(options => { options.AddConsole(); }).CreateLogger("Startup");
 var builder = WebApplication.CreateBuilder(args);
-var mediatorAssemblies = new List<System.Reflection.Assembly>();
 
 //the package Open Api will change how to configure in dotnet 9
 builder.Services.AddEndpointsApiExplorer();
@@ -20,9 +19,13 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddIdentityServer(builder.Configuration);
 builder.Services.AddAuthorization();
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddScoped<IUserSession, UserSession>();
+builder.Services.AddMediator(options =>
+{
+    options.ServiceLifetime = ServiceLifetime.Scoped;
+});
+
 builder.Services.AddModule<UserModule>()
-    .RegisterModules(builder.Configuration, logger, mediatorAssemblies);
+    .RegisterModules(builder.Configuration, logger);
 
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options => {

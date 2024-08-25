@@ -12,7 +12,7 @@ public static class ModuleLoader
     private static List<Type> ModulesTypes { get; set; } = [];
     private static Dictionary<string, IModuleRegister> Modules { get; } = new();
     
-    public static void RegisterModules(this IServiceCollection services, IConfiguration configuration, ILogger logger, List<System.Reflection.Assembly> mediatorAssemblies)
+    public static void RegisterModules(this IServiceCollection services, IConfiguration configuration, ILogger logger)
     {
         logger.LogInformation("Loading modules");
         
@@ -21,7 +21,7 @@ public static class ModuleLoader
         {
             var module = GetModuleInstance(moduleType);
             logger.LogInformation("Registering {Module}", moduleType.Name);
-            module.RegisterServices(services, configuration, logger, mediatorAssemblies);
+            module.RegisterServices(services, configuration, logger);
             logger.LogInformation("{Module} registered", moduleType.Name);
         }
     }

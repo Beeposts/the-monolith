@@ -2,7 +2,7 @@ using Shared.Domains;
 
 namespace Users.Domain;
 
-internal record Role : TenantEntity
+public record Role : TenantEntity
 {
     public required string Name { get; set; }
     public List<Permission> Permissions { get; set; } = [];

@@ -2,7 +2,7 @@ using Shared.Domains;
 
 namespace Users.Domain;
 
-internal record Permission : TenantEntity<long>
+public record Permission : TenantEntity<long>
 {
     public required string Name { get; set; }
     public int? UserId { get; set; }
