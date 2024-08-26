@@ -1,4 +1,6 @@
 using System.Reflection;
+using Duende.IdentityServer.EntityFramework.DbContexts;
+using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,9 +11,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Shared.Abstractions;
-using Shared.Models;
+using Shared.Databases;
 using Shared.Modules.Abstractions;
 using Users.Database;
+using Users.Endpoints.ApiClientEndpoints;
+using Users.Extensions;
 using Users.Middlewares;
 using Users.Services;
 
@@ -23,6 +27,12 @@ public class UserModule : IModuleRegister
     {
         logger.LogInformation("Registering User module services");
         var connectionString = configuration.GetConnectionString("DefaultConnection");
+        
+        services.AddIdentityDatabase(configuration);
+        services.AddIdentityConfigurationDatabase(configuration);
+
+        services.AddValidatorsFromAssemblyContaining<UserModule>();
+        
         services.AddDbContext<UserDbContext>(options =>
         {
             options.UseNpgsql(connectionString,
@@ -36,24 +46,24 @@ public class UserModule : IModuleRegister
 
     public void RegisterEndpoints(IEndpointRouteBuilder endpoints)
     {
-        endpoints.MapPost("users", ([AsParameters]Dummy request) => $"Hello from User endpoint {request.TenantSlug}")
+        endpoints.MapApiClientEndpoints();
+        endpoints.MapPost("users", ([AsParameters]Dummy request) => $"Hello from User endpoint")
             .RequireAuthorization();
 
     }
 
     public void UseModule(IApplicationBuilder app)
     {
-        using var scope = app.ApplicationServices.CreateScope();
-        var dbContext = scope.ServiceProvider.GetRequiredService<UserDbContext>();
-        dbContext.Database.Migrate();
-
+        // using var scope = app.ApplicationServices.CreateScope();
+        // var dbContext = scope.ServiceProvider.GetRequiredService<UserDbContext>();
+        // dbContext.Database.Migrate();
 
         app.UseMiddleware<UserSessionMiddleware>();
         app.UseMiddleware<TenantResolverMiddleware>();
     }
 }
 
-public record Dummy : BaseTenantRequest
+public record Dummy
 {
     [FromBody]
     public People? Person { get; init; }

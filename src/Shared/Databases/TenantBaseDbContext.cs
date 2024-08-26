@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Shared.Abstractions;
 using Shared.Domains;
+using Shared.Domains.Abstractions;
 
 namespace Shared.Databases;
 
@@ -29,7 +30,9 @@ public abstract class TenantBaseDbContext<TDbContext> : DbContext
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {
         var tenantId = _tenantSession.TenantId;
+        var userId = _userSession.UserId;
         ApplyDomainRules(ChangeTracker, tenantId);
+        ApplyAuditRule(ChangeTracker, userId);
         var result = await base.SaveChangesAsync(cancellationToken);
 
         return result;
@@ -47,7 +50,7 @@ public abstract class TenantBaseDbContext<TDbContext> : DbContext
         var method = GetType()
             .GetMethod(nameof(GenerateTenantFilter), BindingFlags.Instance | BindingFlags.NonPublic);
         
-        foreach (var entityType in modelBuilder.Model.GetEntityTypes().Where(x => typeof(TenantEntity<TPrimaryKey>).IsAssignableFrom(x.ClrType)))
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes().Where(x => typeof(ITenantEntity<TPrimaryKey>).IsAssignableFrom(x.ClrType)))
         {
             LambdaExpression lambda = (method?
                 .MakeGenericMethod(entityType.ClrType, typeof(TPrimaryKey))
@@ -69,10 +72,37 @@ public abstract class TenantBaseDbContext<TDbContext> : DbContext
         if(tenantId is null)
             return;
         
-        var entities = changeTracker.Entries<TenantEntity<TPrimaryKey>>().Where(x => x.State == EntityState.Added).Select(x => x.Entity);
+        var entities = changeTracker.Entries<ITenantEntity<TPrimaryKey>>().Where(x => x.State == EntityState.Added).Select(x => x.Entity);
         foreach (var entity in entities)
         {
             entity.TenantId = tenantId.Value;
+        }
+    }
+
+    private void ApplyAuditRule(ChangeTracker changeTracker, int? userId)
+    {
+        ApplyAuditRule<int>(changeTracker, userId);
+        ApplyAuditRule<long>(changeTracker, userId);
+        ApplyAuditRule<Guid>(changeTracker, userId);
+    }
+    
+    private void ApplyAuditRule<TPrimaryKey>(ChangeTracker changeTracker, int? userId)
+    {
+        if(userId is null)
+            return;
+        
+        var entities = changeTracker.Entries<IAuditableEntity<TPrimaryKey>>().Where(x => x.State == EntityState.Added).Select(x => x.Entity);
+        foreach (var entity in entities)
+        {
+            entity.CreatedBy = userId.Value;
+            entity.CreatedAt = DateTime.UtcNow;
+        }
+        
+        entities = changeTracker.Entries<IAuditableEntity<TPrimaryKey>>().Where(x => x.State == EntityState.Modified).Select(x => x.Entity);
+        foreach (var entity in entities)
+        {
+            entity.UpdatedBy = userId.Value;
+            entity.UpdatedAt = DateTime.UtcNow;
         }
     }
     

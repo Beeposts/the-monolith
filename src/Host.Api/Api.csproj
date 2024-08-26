@@ -19,6 +19,7 @@
     <PackageReference Include="Scalar.AspNetCore" />
     <PackageReference Include="Swashbuckle.AspNetCore" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" />
+    <PackageReference Include="Community.Microsoft.Extensions.Caching.PostgreSql" />
   </ItemGroup>
 
   <ItemGroup>

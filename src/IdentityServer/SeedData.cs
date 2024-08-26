@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Shared.Databases;
 using Shared.Models;
+using Users.Database;
 
 namespace IdentityServer;
 

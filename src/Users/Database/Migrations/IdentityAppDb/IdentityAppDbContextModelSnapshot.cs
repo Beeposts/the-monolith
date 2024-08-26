@@ -8,7 +8,7 @@ using Shared.Databases;
 
 #nullable disable
 
-namespace Shared.Databases.Migrations.Identity
+namespace Users.Database.Migrations.IdentityAppDb
 {
     [DbContext(typeof(IdentityAppDbContext))]
     partial class IdentityAppDbContextModelSnapshot : ModelSnapshot
@@ -17,7 +17,7 @@ namespace Shared.Databases.Migrations.Identity
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.7")
+                .HasAnnotation("ProductVersion", "8.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);

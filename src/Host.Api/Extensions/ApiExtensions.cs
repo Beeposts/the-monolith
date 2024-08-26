@@ -5,7 +5,7 @@ namespace Api.Extensions;
 
 public static class ApiExtensions
 {
-    public static void AddIdentityServer(this IServiceCollection services, IConfiguration configuration)
+    public static void ConfigureIdentityServer(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>

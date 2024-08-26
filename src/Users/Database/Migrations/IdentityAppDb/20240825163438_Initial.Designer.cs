@@ -9,18 +9,18 @@ using Shared.Databases;
 
 #nullable disable
 
-namespace Shared.Databases.Migrations.Identity
+namespace Users.Database.Migrations.IdentityAppDb
 {
     [DbContext(typeof(IdentityAppDbContext))]
-    [Migration("20240801021823_Users")]
-    partial class Users
+    [Migration("20240825163438_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.7")
+                .HasAnnotation("ProductVersion", "8.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);

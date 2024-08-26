@@ -1,8 +1,11 @@
 using Api;
 using Api.Extensions;
+using Community.Microsoft.Extensions.Caching.PostgreSql;
+using Mediator;
 using Microsoft.OpenApi.Models;
 using Scalar.AspNetCore;
 using Shared.Abstractions;
+using Shared.Behaviors;
 using Shared.Modules;
 using Users;
 
@@ -16,7 +19,11 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "The Monolith Api", Version = "v1" });
 });
 
-builder.Services.AddIdentityServer(builder.Configuration);
+builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>));
+builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(TenantBackgroundContextBehavior<,>));
+builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(TenantContextResolverBehavior<,>));
+
+builder.Services.ConfigureIdentityServer(builder.Configuration);
 builder.Services.AddAuthorization();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddMediator(options =>
@@ -27,7 +34,14 @@ builder.Services.AddMediator(options =>
 builder.Services.AddModule<UserModule>()
     .RegisterModules(builder.Configuration, logger);
 
-builder.Services.AddDistributedMemoryCache();
+//builder.Services.AddDistributedMemoryCache();
+builder.Services.AddDistributedPostgreSqlCache(options =>
+{
+    options.ConnectionString = builder.Configuration.GetConnectionString("CacheConnection");
+    options.SchemaName = "cache";
+    options.TableName = "cache";
+    options.CreateInfrastructure = true;
+});
 builder.Services.AddSession(options => {
     options.Cookie.Name = ".TheMonolith.Session";
     options.IdleTimeout = TimeSpan.FromMinutes(5);
@@ -36,12 +50,12 @@ builder.Services.AddSession(options => {
 var app = builder.Build();
 
 app.MapGet("/", () => "Hello World!")
+    .RequireAuthorization()
     .WithOpenApi();
 
-
-app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseSession();
 
 app.UseModules(logger);
 

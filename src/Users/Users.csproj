@@ -13,6 +13,8 @@
 
     <ItemGroup>
       <PackageReference Include="IdentityModel" />
+      <PackageReference Include="Duende.IdentityServer.AspNetIdentity" />
+      <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" />  
     </ItemGroup>
 
 </Project>

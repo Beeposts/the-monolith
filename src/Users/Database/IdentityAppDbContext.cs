@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Shared.Models;
 
-namespace Shared.Databases;
+namespace Users.Database;
 
 public class IdentityAppDbContext(DbContextOptions<IdentityAppDbContext> options)
     : IdentityDbContext<ApplicationUser>(options)

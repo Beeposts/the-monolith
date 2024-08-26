@@ -14,13 +14,15 @@ public class UserSession : IUserSession
     {
         _httpContextAccessor = httpContextAccessor;
     }
+    
+    private string UserIdKey => $"{AppConsts.UserSessionKey}_{IdentityUserId}";
 
-    public int? UserId => _httpContextAccessor.HttpContext?.Session.GetInt32(AppConsts.UserSessionKey);
+    public int? UserId => _httpContextAccessor.HttpContext?.Session.GetInt32(UserIdKey);
     public string? IdentityUserId => _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
     public string? Email => _httpContextAccessor.HttpContext?.User?.FindFirstValue(JwtClaimTypes.Email);
     
     public void SetUserId(int userId)
     {
-        _httpContextAccessor.HttpContext?.Session?.SetInt32(AppConsts.UserSessionKey, userId);
+        _httpContextAccessor.HttpContext?.Session?.SetInt32(UserIdKey, userId);
     }
 }

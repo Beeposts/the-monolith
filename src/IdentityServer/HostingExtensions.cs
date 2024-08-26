@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Shared.Databases;
 using Shared.Models;
+using Users.Extensions;
 
 namespace IdentityServer;
 
@@ -13,29 +14,9 @@ internal static class HostingExtensions
     {
         builder.Services.AddRazorPages();
 
-        builder.Services.AddDbContext<IdentityAppDbContext>(options =>
-            options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+        builder.Services.ConfigureIdentity(builder.Configuration);
 
-        builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-            .AddEntityFrameworkStores<IdentityAppDbContext>()
-            .AddDefaultTokenProviders();
-
-        builder.Services
-            .AddIdentityServer(options =>
-            {
-                options.Events.RaiseErrorEvents = true;
-                options.Events.RaiseInformationEvents = true;
-                options.Events.RaiseFailureEvents = true;
-                options.Events.RaiseSuccessEvents = true;
-
-                // see https://docs.duendesoftware.com/identityserver/v6/fundamentals/resources/
-                options.EmitStaticAudienceClaim = true;
-            })
-            .AddInMemoryIdentityResources(Config.IdentityResources)
-            .AddInMemoryApiScopes(Config.ApiScopes)
-            .AddInMemoryApiResources(Config.ApiResources)
-            .AddInMemoryClients(Config.Clients)
-            .AddAspNetIdentity<ApplicationUser>();
+        builder.Services.ConfigureIdentityService(builder.Configuration);
         
         builder.Services.AddAuthentication()
             .AddGoogle(options =>

@@ -1,5 +1,6 @@
 ﻿using IdentityServer;
 using Serilog;
+using Users.Database.DataSeed;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -25,7 +26,8 @@ try
     if (args.Contains("/seed"))
     {
         Log.Information("Seeding database...");
-        SeedData.EnsureSeedData(app);
+        //SeedData.EnsureSeedData(app);
+        await IdentityDataSeed.EnsureSeedData(app);
         Log.Information("Done seeding database. Exiting.");
         return;
     }
