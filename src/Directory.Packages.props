@@ -24,6 +24,7 @@
     <PackageVersion Include="Ardalis.Result.AspNetCore" Version="9.1.0" />
     <PackageVersion Include="Microsoft.AspNetCore.Components" Version="8.0.5" />
     <PackageVersion Include="Scalar.AspNetCore" Version="1.1.2" />
+    <PackageVersion Include="Stateless" Version="5.16.0" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.7.1" />
     <PackageVersion Include="Vite.AspNetCore" Version="2.0.0" />
     <PackageVersion Include="Duende.IdentityServer.AspNetIdentity" Version="7.0.6" />

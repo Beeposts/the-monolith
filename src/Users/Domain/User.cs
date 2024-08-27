@@ -15,4 +15,8 @@ public record User : Entity
 internal static class UserSpecification
 {
     public const int IdentityIdMaxLength = 60;
+    public const int EmailMaxLength = 320;
+    public const int FirstNameMaxLength = 100;
+    public const int LastNameMaxLength = 100;
+    public const int PasswordMaxLength = 100;
 }
