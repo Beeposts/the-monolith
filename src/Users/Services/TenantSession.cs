@@ -28,7 +28,6 @@ internal class TenantSession : ITenantSession
     
     public void SetSlug(string slug)
     {
-        if(_httpContextAccessor.HttpContext?.Session is not null)
-            _httpContextAccessor.HttpContext?.Session.SetString(TenantSlugSessionKey, slug);
+        _httpContextAccessor.HttpContext?.Session?.SetString(TenantSlugSessionKey, slug);
     }
 }
