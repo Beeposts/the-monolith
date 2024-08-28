@@ -11,7 +11,7 @@ public abstract class PipelineBehaviorErrorHandler
         if (typeof(TResult) == typeof(Result))
         {
             return (TResult) typeof(Result)
-                .GetMethod(nameof(Result.Invalid))!
+                .GetMethod(nameof(Result.Invalid), [errors.GetType()])!
                 .Invoke(null, [errors])!;
         }
 
@@ -20,8 +20,10 @@ public abstract class PipelineBehaviorErrorHandler
             .MakeGenericType(typeof(TResult).GenericTypeArguments[0])
             .GetMethods()
             .FirstOrDefault(m =>
+                m.Name == nameof(Result.Invalid) &&
                 m.GetParameters()
-                    .Any(p => p.ParameterType == typeof(ValidationError[])))!
+                    .Any(p =>
+                        p.ParameterType == typeof(ValidationError[])))!
             .Invoke(null, [errors])!;
 
         return (TResult) validationResult;

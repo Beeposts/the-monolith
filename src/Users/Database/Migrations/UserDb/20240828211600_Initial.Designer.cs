@@ -9,11 +9,11 @@ using Users.Database;
 
 #nullable disable
 
-namespace Users.Database.Migrations
+namespace Users.Database.Migrations.UserDb
 {
     [DbContext(typeof(UserDbContext))]
-    [Migration("20240825215430_AddApiClientTable")]
-    partial class AddApiClientTable
+    [Migration("20240828211600_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -80,6 +80,9 @@ namespace Users.Database.Migrations
                     b.Property<int?>("CreatedBy")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("CreatedByClientId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("TenantId")
                         .HasColumnType("integer");
 
@@ -87,6 +90,9 @@ namespace Users.Database.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int?>("UpdatedBy")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("UpdatedByClientId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -209,6 +215,42 @@ namespace Users.Database.Migrations
                         .IsUnique();
 
                     b.ToTable("User", "users");
+                });
+
+            modelBuilder.Entity("Users.Domain.UserRegistration", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("InviteCode")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int?>("InvitedByTenantId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("InvitedByUserId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("StatusReason")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserRegistration", "users");
                 });
 
             modelBuilder.Entity("RoleUser", b =>

@@ -14,7 +14,7 @@ using Shared.Abstractions;
 using Shared.Databases;
 using Shared.Modules.Abstractions;
 using Users.Database;
-using Users.Endpoints.ApiClientEndpoints;
+using Users.Endpoints;
 using Users.Extensions;
 using Users.Middlewares;
 using Users.Services;
@@ -47,8 +47,7 @@ public class UserModule : IModuleRegister
     public void RegisterEndpoints(IEndpointRouteBuilder endpoints)
     {
         endpoints.MapApiClientEndpoints();
-        endpoints.MapPost("users", ([AsParameters]Dummy request) => $"Hello from User endpoint")
-            .RequireAuthorization();
+        endpoints.MapUserEndpoints();
 
     }
 
@@ -59,7 +58,7 @@ public class UserModule : IModuleRegister
         // dbContext.Database.Migrate();
 
         app.UseMiddleware<UserSessionMiddleware>();
-        app.UseMiddleware<TenantResolverMiddleware>();
+        //app.UseMiddleware<TenantResolverMiddleware>();
     }
 }
 

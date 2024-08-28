@@ -6,6 +6,7 @@ public static class AppConsts
     public const string ApiPrefix = "api";
     public const string TenantHeader = "Tenant";
     public const string UserSessionKey = "UserSession";
+    public const string ApiClientSessionKey = "ApiClientSession";
 }
 
 public static class IdentityConsts

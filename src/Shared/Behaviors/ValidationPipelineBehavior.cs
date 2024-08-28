@@ -24,13 +24,24 @@ public class ValidationPipelineBehavior<TRequest, TResponse>
             .Select(v => v.Validate(message))
             .SelectMany(result => result.Errors)
             .Where(failure => failure is not null)
-            .Select(x => new ValidationError(x.ErrorMessage))
+            .Select(x => 
+                new ValidationError(x.PropertyName, x.ErrorMessage, x.ErrorCode, MapSeverity(x.Severity)))
             .Distinct()
             .ToArray();
-
         if (errors.Length != 0)
             return CreateFailureResult<TResponse>(errors);
 
         return await next(message,cancellationToken);
+    }
+
+    ValidationSeverity MapSeverity(FluentValidation.Severity severity)
+    {
+        return severity switch
+        {
+            FluentValidation.Severity.Error => ValidationSeverity.Error,
+            FluentValidation.Severity.Warning => ValidationSeverity.Warning,
+            FluentValidation.Severity.Info => ValidationSeverity.Info,
+            _ => ValidationSeverity.Error
+        };
     }
 }

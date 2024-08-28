@@ -20,6 +20,9 @@ public static class IdentityStartup
         services.AddSingleton(new OperationalStoreOptions());
         services.AddDbContext<ConfigurationDbContext>(options =>
             options.UseNpgsql(configuration.GetConnectionString("IdentityConnection")));
+
+        services.AddIdentityCore<ApplicationUser>()
+            .AddEntityFrameworkStores<IdentityAppDbContext>();
         
         services.AddScoped<IConfigurationDbContext, ConfigurationDbContext>();
 

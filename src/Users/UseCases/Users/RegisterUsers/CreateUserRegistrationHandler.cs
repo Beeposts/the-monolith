@@ -8,29 +8,21 @@ using Users.StateMachines;
 
 namespace Users.UseCases.Users.RegisterUsers;
 
-public record RegisterUserRequest : IRequest<Result<Unit>>
-{
-    [FromBody]
-    public RegisterUserRequestData? Data { get; set; }
-    
-    public record RegisterUserRequestData(string FirstName, string LastName, string Email, string Password, string ConfirmPassword);
-}
+public record CreateUserRegistrationRequest(string Email, string Name) : IRequest<Result>;
 
-public class RegisterUserHandler : IRequestHandler<RegisterUserRequest, Result<Unit>>
+public class CreateUserRegistrationHandler : IRequestHandler<CreateUserRegistrationRequest, Result>
 {
     readonly UserDbContext _userDbContext;
 
-    public RegisterUserHandler(UserDbContext userDbContext)
+    public CreateUserRegistrationHandler(UserDbContext userDbContext)
     {
         _userDbContext = userDbContext;
     }
-    public async ValueTask<Result<Unit>> Handle(RegisterUserRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Result> Handle(CreateUserRegistrationRequest request, CancellationToken cancellationToken)
     {
         var entity = new UserRegistration
         {
-            Email = request.Data!.Email,
-            FirstName = request.Data!.FirstName,
-            LastName = request.Data!.LastName,
+            Email = request.Email,
             InviteCode = Guid.NewGuid().ToString(),
             Status = UserRegistrationStatus.New,
             StatusReason = UserRegistrationStatusReason.Created

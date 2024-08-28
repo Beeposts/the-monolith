@@ -6,11 +6,7 @@ public class ValidateUserInvitationCodeValidation : AbstractValidator<ValidateUs
 {
     public ValidateUserInvitationCodeValidation()
     {
-        RuleFor(x => x.Data)
-            .NotNull();
-        
-        RuleFor(x => x.Data!.InvitationCode)
-            .NotEmpty()
-            .When(x => x.Data is not null);
+        RuleFor(x => x.InvitationCode)
+            .NotEmpty();
     }
 }

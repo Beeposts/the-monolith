@@ -3,20 +3,16 @@ using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Users.Database;
+using Users.Domain;
 
 namespace Users.UseCases.Users.RegisterUsers;
 
-public record ValidateUserInvitationCodeRequest : IRequest<Result<Unit>>
+public record ValidateUserInvitationCodeRequest : IRequest<Result>
 {
-    [FromBody]
-    public ValidateUserInvitationCodeData? Data { get; set; }
-    public record ValidateUserInvitationCodeData
-    {
-        public string? InvitationCode { get; set; }
-    }
+    public string? InvitationCode { get; set; }
 }
 
-public class ValidateUserInvitationCodeHandler : IRequestHandler<ValidateUserInvitationCodeRequest, Result<Unit>>
+public class ValidateUserInvitationCodeHandler : IRequestHandler<ValidateUserInvitationCodeRequest, Result>
 {
     readonly UserDbContext _dbContext;
 
@@ -24,12 +20,13 @@ public class ValidateUserInvitationCodeHandler : IRequestHandler<ValidateUserInv
     {
         _dbContext = dbContext;
     }
-    public async ValueTask<Result<Unit>> Handle(ValidateUserInvitationCodeRequest request, CancellationToken cancellationToken)
+    public async ValueTask<Result> Handle(ValidateUserInvitationCodeRequest request, CancellationToken cancellationToken)
     {
         var entity = await _dbContext.UserRegistration
             .FirstOrDefaultAsync(x => 
-                    x.InviteCode == request.Data!.InvitationCode &&
-                    x.ExpiresAt > DateTime.UtcNow
+                    x.InviteCode == request.InvitationCode &&
+                    x.ExpiresAt > DateTime.UtcNow &&
+                    x.Status != UserRegistrationStatus.Finished
                 ,cancellationToken);
 
         return entity is null ? Result.Invalid(new ValidationError("Invalid invitation code")) : Result.Success();

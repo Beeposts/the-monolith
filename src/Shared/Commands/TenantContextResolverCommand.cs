@@ -13,3 +13,5 @@ public abstract record TenantContextResolverCommand<TResponse> : IRequest<Result
     [FromHeader(Name = AppConsts.TenantHeader)]
     public string TenantSlug { get; init; } = string.Empty;
 }
+
+public abstract record TenantContextResolverCommand : TenantContextResolverCommand<Result>;

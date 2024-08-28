@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Routing;
 using Users.UseCases.ApiClients.CreateApiClient;
 using IResult = Microsoft.AspNetCore.Http.IResult;
 
-namespace Users.Endpoints.ApiClientEndpoints;
+namespace Users.Endpoints;
 
 public static class ApiClientEndpointsRegister
 {

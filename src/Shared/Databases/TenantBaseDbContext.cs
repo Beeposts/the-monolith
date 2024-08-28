@@ -31,20 +31,21 @@ public abstract class TenantBaseDbContext<TDbContext> : DbContext
     {
         var tenantId = _tenantSession.TenantId;
         var userId = _userSession.UserId;
+        var clientId = _userSession.ClientId;
         ApplyDomainRules(ChangeTracker, tenantId);
-        ApplyAuditRule(ChangeTracker, userId);
+        ApplyAuditRule(ChangeTracker, userId, clientId);
         var result = await base.SaveChangesAsync(cancellationToken);
 
         return result;
     }
 
-    protected void ApplyTenantFilters(ModelBuilder modelBuilder)
+    void ApplyTenantFilters(ModelBuilder modelBuilder)
     {
         ApplyTenantFilter<int>(modelBuilder);
         ApplyTenantFilter<Guid>(modelBuilder);
         ApplyTenantFilter<long>(modelBuilder);
     }
-    private void ApplyTenantFilter<TPrimaryKey>(ModelBuilder modelBuilder)
+    void ApplyTenantFilter<TPrimaryKey>(ModelBuilder modelBuilder)
     {
 
         var method = GetType()
@@ -52,7 +53,7 @@ public abstract class TenantBaseDbContext<TDbContext> : DbContext
         
         foreach (var entityType in modelBuilder.Model.GetEntityTypes().Where(x => typeof(ITenantEntity<TPrimaryKey>).IsAssignableFrom(x.ClrType)))
         {
-            LambdaExpression lambda = (method?
+            var lambda = (method?
                 .MakeGenericMethod(entityType.ClrType, typeof(TPrimaryKey))
                 .Invoke(this, null) as LambdaExpression)!;
 
@@ -60,14 +61,14 @@ public abstract class TenantBaseDbContext<TDbContext> : DbContext
         }
     }
 
-    private void ApplyDomainRules(ChangeTracker changeTracker, int? tenantId)
+    static void ApplyDomainRules(ChangeTracker changeTracker, int? tenantId)
     {
         ApplyDomainRule<int>(changeTracker, tenantId);
         ApplyDomainRule<long>(changeTracker, tenantId);
         ApplyDomainRule<Guid>(changeTracker, tenantId); 
     }
 
-    private void ApplyDomainRule<TPrimaryKey>(ChangeTracker changeTracker, int? tenantId)
+    static void ApplyDomainRule<TPrimaryKey>(ChangeTracker changeTracker, int? tenantId)
     {
         if(tenantId is null)
             return;
@@ -79,14 +80,18 @@ public abstract class TenantBaseDbContext<TDbContext> : DbContext
         }
     }
 
-    private void ApplyAuditRule(ChangeTracker changeTracker, int? userId)
+    static void ApplyAuditRule(ChangeTracker changeTracker, int? userId, int? clientId)
     {
         ApplyAuditRule<int>(changeTracker, userId);
         ApplyAuditRule<long>(changeTracker, userId);
         ApplyAuditRule<Guid>(changeTracker, userId);
+        
+        ApplyApiClientAuditRule<int>(changeTracker, clientId);
+        ApplyApiClientAuditRule<long>(changeTracker, clientId);
+        ApplyApiClientAuditRule<Guid>(changeTracker, clientId);
     }
-    
-    private void ApplyAuditRule<TPrimaryKey>(ChangeTracker changeTracker, int? userId)
+
+    static void ApplyAuditRule<TPrimaryKey>(ChangeTracker changeTracker, int? userId)
     {
         if(userId is null)
             return;
@@ -102,6 +107,26 @@ public abstract class TenantBaseDbContext<TDbContext> : DbContext
         foreach (var entity in entities)
         {
             entity.UpdatedBy = userId.Value;
+            entity.UpdatedAt = DateTime.UtcNow;
+        }
+    }
+    
+    static void ApplyApiClientAuditRule<TPrimaryKey>(ChangeTracker changeTracker, int? clientId)
+    {
+        if(clientId is null)
+            return;
+        
+        var entities = changeTracker.Entries<IAuditableEntity<TPrimaryKey>>().Where(x => x.State == EntityState.Added).Select(x => x.Entity);
+        foreach (var entity in entities)
+        {
+            entity.CreatedByClientId = clientId.Value;
+            entity.CreatedAt = DateTime.UtcNow;
+        }
+        
+        entities = changeTracker.Entries<IAuditableEntity<TPrimaryKey>>().Where(x => x.State == EntityState.Modified).Select(x => x.Entity);
+        foreach (var entity in entities)
+        {
+            entity.UpdatedByClientId = clientId.Value;
             entity.UpdatedAt = DateTime.UtcNow;
         }
     }
