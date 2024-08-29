@@ -8,10 +8,7 @@ public interface ITenantContextResolverCommand : IMessage
 {
 }
 
-public abstract record TenantContextResolverCommand<TResponse> : IRequest<Result<TResponse>>, ITenantContextResolverCommand 
-{
-    [FromHeader(Name = AppConsts.TenantHeader)]
-    public string TenantSlug { get; init; } = string.Empty;
-}
+public abstract record TenantContextResolverCommand<TResponse> : IRequest<Result<TResponse>>,
+    ITenantContextResolverCommand;
 
 public abstract record TenantContextResolverCommand : TenantContextResolverCommand<Result>;

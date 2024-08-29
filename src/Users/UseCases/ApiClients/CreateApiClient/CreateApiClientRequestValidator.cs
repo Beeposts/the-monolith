@@ -7,13 +7,9 @@ public class CreateApiClientRequestValidator : AbstractValidator<CreateApiClient
 {
     public CreateApiClientRequestValidator()
     {
-        RuleFor(x => x.Data)
-            .NotNull();
 
-        RuleFor(x => x.Data!.ClientName)
+        RuleFor(x => x.ClientName)
             .NotEmpty()
-            .MaximumLength(ApiClientSpecification.ClientNameMaxLength)
-            .When(x => x.Data is not null);
-
+            .MaximumLength(ApiClientSpecification.ClientNameMaxLength);
     }
 }

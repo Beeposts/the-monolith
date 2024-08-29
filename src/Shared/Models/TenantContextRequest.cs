@@ -3,13 +3,10 @@ using Shared.Commands;
 
 namespace Shared.Models;
 
-public record TenantContextRequest<TRequest, TResponse> : TenantContextResolverCommand<TResponse>
+public record TenantContextRequest<TRequest>
     where TRequest : class
 {
-    [FromBody] public TRequest? Data { get; set; }
-}
-
-public record TenantContextRequest<TRequest> : TenantContextResolverCommand
-{
-    [FromBody] public TRequest? Data { get; set; }
+    [FromHeader(Name = AppConsts.TenantHeader)]
+    public string TenantSlug { get; init; } = string.Empty;
+    [FromBody] public required TRequest Data { get; set; }
 }

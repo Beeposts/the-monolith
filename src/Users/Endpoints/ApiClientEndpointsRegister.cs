@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using Shared.Models;
 using Users.UseCases.ApiClients.CreateApiClient;
 using IResult = Microsoft.AspNetCore.Http.IResult;
 
@@ -24,10 +25,10 @@ public static class ApiClientEndpointsRegister
     }
     
     static async Task<IResult> CreateAsync(
-        [AsParameters] CreateApiClientRequest request, 
+        [AsParameters] TenantContextRequest<CreateApiClientRequest> request, 
         [FromServices] IMediator mediator)
     {
-        var result = await mediator.Send(request);
+        var result = await mediator.Send(request.Data);
         return result.ToMinimalApiResult();
     }
 }
