@@ -1,8 +1,7 @@
 namespace Users.Domain;
 
-public enum UserRegistrationStatus
+public enum UserInviteStatus
 {
-    New = 10,
     Pending = 40,
     Finished = 70
 }

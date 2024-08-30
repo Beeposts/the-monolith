@@ -14,6 +14,11 @@ public abstract class BaseStateMachine<TState, TStateReason>
         StateMachine = new StateMachine<TState, TStateReason>(initialState);
         Configure();
     }
+    protected BaseStateMachine(Func<TState> stateAccessor, Action<TState> stateMutator)
+    {
+        StateMachine = new StateMachine<TState, TStateReason>(stateAccessor, stateMutator);
+        Configure();
+    }
     protected abstract void Configure();
     
     public bool CanFire(TStateReason trigger) => StateMachine.CanFire(trigger);

@@ -14,12 +14,7 @@ using Users.Domain;
 
 namespace Users.UseCases.ApiClients.CreateApiClient;
 
-public record CreateApiClientRequest : TenantContextResolverCommand<CreateApiClientResponse>
-{ 
-    [FromBody]
-    public ApiClientData? Data { get; set; }
-    public record ApiClientData(string ClientName);
-}
+public record CreateApiClientRequest(string ClientName) : TenantContextResolverCommand<CreateApiClientResponse>;
 
 public record CreateApiClientResponse(string ClientName, string ClientId, string ClientSecret);
 
@@ -44,7 +39,7 @@ public class CreateApiClientHandler : IRequestHandler<CreateApiClientRequest, Re
         {
             ClientId = clientId,
             ClientClaimsPrefix = "",
-            ClientName = request.Data!.ClientName,
+            ClientName = request.ClientName,
             ClientSecrets =
             [
                 new ClientSecret
@@ -70,7 +65,7 @@ public class CreateApiClientHandler : IRequestHandler<CreateApiClientRequest, Re
         var apiClient = new ApiClient
         {
             ClientId = clientId,
-            ClientName = request.Data.ClientName
+            ClientName = request.ClientName
         };
 
         await _userDbContext.ApiClient.AddAsync(apiClient, cancellationToken);

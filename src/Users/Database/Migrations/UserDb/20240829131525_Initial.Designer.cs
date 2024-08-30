@@ -12,7 +12,7 @@ using Users.Database;
 namespace Users.Database.Migrations.UserDb
 {
     [DbContext(typeof(UserDbContext))]
-    [Migration("20240828211600_Initial")]
+    [Migration("20240829131525_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -217,7 +217,7 @@ namespace Users.Database.Migrations.UserDb
                     b.ToTable("User", "users");
                 });
 
-            modelBuilder.Entity("Users.Domain.UserRegistration", b =>
+            modelBuilder.Entity("Users.Domain.UserInvite", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -250,7 +250,7 @@ namespace Users.Database.Migrations.UserDb
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserRegistration", "users");
+                    b.ToTable("UserInvite", "users");
                 });
 
             modelBuilder.Entity("RoleUser", b =>

@@ -3,17 +3,14 @@ using Users.Domain;
 
 namespace Users.UseCases.Users.RegisterUsers;
 
-public class CreateUserRegistrationValidation : AbstractValidator<CreateUserRegistrationRequest>
+public class CreateUserInviteValidation : AbstractValidator<CreateUserInviteRequest>
 {
-    public CreateUserRegistrationValidation()
+    public CreateUserInviteValidation()
     {
 
         RuleFor(x => x.Email)
             .NotEmpty()
             .MaximumLength(UserSpecification.EmailMaxLength)
             .EmailAddress();
-
-        RuleFor(x => x.Name)
-            .NotEmpty();
     }
 }

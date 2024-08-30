@@ -18,13 +18,13 @@ public static class UserEndpointsRegister
             .MapGroup(Base)
             .WithTags("Users");
         
-        group.MapPost("", CreateUserRegistration);
+        group.MapPost("/invite", CreateUserRegistration);
+        group.MapPost("/invite/validate", ValidateUserInvitationCode);
         group.MapPost("/register", ConfirmUserRegistration);
-        group.MapPost("/register/validate", ValidateUserInvitationCode);
     }
     
     static async Task<IResult> CreateUserRegistration(
-        [FromBody] CreateUserRegistrationRequest request, 
+        [FromBody] CreateUserInviteRequest request, 
         [FromServices] ISender mediator)
     {
         var result = await mediator.Send(request);
@@ -32,7 +32,7 @@ public static class UserEndpointsRegister
     }
 
     static async Task<IResult> ConfirmUserRegistration(
-        [FromBody] ConfirmUserRegistrationRequest request,
+        [FromBody] RegisterUserRequest request,
         [FromServices] ISender mediator
         )
     {
@@ -41,7 +41,7 @@ public static class UserEndpointsRegister
     }
     
     static async Task<IResult> ValidateUserInvitationCode(
-        [AsParameters] ValidateUserInvitationCodeRequest request,
+        [FromBody] ValidateUserInvitationCodeRequest request,
         [FromServices] ISender mediator
         )
     {

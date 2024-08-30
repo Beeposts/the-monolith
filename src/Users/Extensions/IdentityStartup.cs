@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Shared.Databases;
+using Shared.Domains;
 using Shared.Models;
 using Users.Database;
 

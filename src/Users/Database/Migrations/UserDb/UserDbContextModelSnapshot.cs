@@ -214,7 +214,7 @@ namespace Users.Database.Migrations.UserDb
                     b.ToTable("User", "users");
                 });
 
-            modelBuilder.Entity("Users.Domain.UserRegistration", b =>
+            modelBuilder.Entity("Users.Domain.UserInvite", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -247,7 +247,7 @@ namespace Users.Database.Migrations.UserDb
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserRegistration", "users");
+                    b.ToTable("UserInvite", "users");
                 });
 
             modelBuilder.Entity("RoleUser", b =>

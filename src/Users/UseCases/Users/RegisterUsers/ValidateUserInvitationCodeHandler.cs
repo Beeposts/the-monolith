@@ -22,13 +22,13 @@ public class ValidateUserInvitationCodeHandler : IRequestHandler<ValidateUserInv
     }
     public async ValueTask<Result> Handle(ValidateUserInvitationCodeRequest request, CancellationToken cancellationToken)
     {
-        var entity = await _dbContext.UserRegistration
+        var entity = await _dbContext.UserInvite
             .FirstOrDefaultAsync(x => 
                     x.InviteCode == request.InvitationCode &&
                     x.ExpiresAt > DateTime.UtcNow &&
-                    x.Status != UserRegistrationStatus.Finished
+                    x.Status != UserInviteStatus.Finished
                 ,cancellationToken);
 
-        return entity is null ? Result.Invalid(new ValidationError("Invalid invitation code")) : Result.Success();
+        return entity is null ? Result.Invalid(new ValidationError(nameof(request.InvitationCode),"Invalid invitation code", nameof(request.InvitationCode), ValidationSeverity.Error)) : Result.Success();
     }
 }

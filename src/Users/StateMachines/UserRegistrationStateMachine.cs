@@ -3,21 +3,19 @@ using Users.Domain;
 
 namespace Users.StateMachines;
 
-public class UserRegistrationStateMachine : BaseStateMachine<UserRegistrationStatus, UserRegistrationStatusReason>
+public class UserRegistrationStateMachine : BaseStateMachine<UserInviteStatus, UserInviteStatusReason>
 {
-    public UserRegistrationStateMachine(UserRegistrationStatus initialState) : base(initialState)
+    public UserRegistrationStateMachine(Func<UserInviteStatus> stateAccessor, Action<UserInviteStatus> stateMutator) : base(stateAccessor, stateMutator)
     {
     }
 
     protected override void Configure()
     {
-        StateMachine.Configure(UserRegistrationStatus.New)
-            .Permit(UserRegistrationStatusReason.Created, UserRegistrationStatus.Pending);
 
-        StateMachine.Configure(UserRegistrationStatus.Pending)
-            .PermitReentry(UserRegistrationStatusReason.Invited)
-            .PermitReentry(UserRegistrationStatusReason.Confirmed)
-            .Permit(UserRegistrationStatusReason.Registered, UserRegistrationStatus.Finished)
-            .Permit(UserRegistrationStatusReason.Rejected, UserRegistrationStatus.Finished);
+        StateMachine.Configure(UserInviteStatus.Pending)
+            .PermitReentry(UserInviteStatusReason.Invited)
+            .Permit(UserInviteStatusReason.Registered, UserInviteStatus.Finished)
+            .Permit(UserInviteStatusReason.Rejected, UserInviteStatus.Finished)
+            .Permit(UserInviteStatusReason.Expired, UserInviteStatus.Finished);
     }
 }

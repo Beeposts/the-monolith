@@ -12,7 +12,7 @@ public class UserDbContext(DbContextOptions<UserDbContext> options, IUserSession
     public DbSet<Tenant> Tenant { get; init; } = default!;
     public DbSet<Permission> Permissions { get; init; } = default!;
     public DbSet<ApiClient> ApiClient { get; init; } = default!;
-    public DbSet<UserRegistration> UserRegistration { get; init; } = default!;
+    public DbSet<UserInvite> UserInvite { get; init; } = default!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

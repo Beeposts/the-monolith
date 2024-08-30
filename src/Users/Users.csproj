@@ -17,4 +17,8 @@
       <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" />  
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Database\Migrations\UserDb\" />
+    </ItemGroup>
+
 </Project>

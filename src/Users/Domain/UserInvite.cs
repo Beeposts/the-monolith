@@ -2,7 +2,7 @@ using Shared.Domains;
 
 namespace Users.Domain;
 
-public record UserRegistration : Entity
+public record UserInvite : Entity
 {
     public required string InviteCode { get; init; }
     public required string Email { get; init; }
@@ -10,7 +10,7 @@ public record UserRegistration : Entity
     public bool IsInvitedByTenant => InvitedByTenantId.HasValue;
     public int? InvitedByUserId { get; set; }
     public int? InvitedByTenantId { get; set; }
-    public UserRegistrationStatus Status { get; set; } = UserRegistrationStatus.New;
-    public UserRegistrationStatusReason StatusReason { get; set; } = UserRegistrationStatusReason.Created;
+    public UserInviteStatus Status { get; set; } = UserInviteStatus.Pending;
+    public UserInviteStatusReason StatusReason { get; set; } = UserInviteStatusReason.Created;
     public DateTime ExpiresAt { get; set; }
 }

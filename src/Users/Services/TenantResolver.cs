@@ -62,7 +62,7 @@ internal class TenantResolver : ITenantResolver
         {
             var tenant = await _dbContext.Tenant.FirstOrDefaultAsync(x => x.Slug == slug);
             if (tenant is null)
-                return Result.CriticalError($"Tenant with slug '{slug}' not found.");
+                return Result.CriticalError($"Tenant not found.");
             
             var userAllowed = await UserAllowedInTenant(tenant.Id);
             

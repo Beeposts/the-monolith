@@ -85,7 +85,7 @@ namespace Users.Database.Migrations.UserDb
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserRegistration",
+                name: "UserInvite",
                 schema: "users",
                 columns: table => new
                 {
@@ -101,7 +101,7 @@ namespace Users.Database.Migrations.UserDb
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserRegistration", x => x.Id);
+                    table.PrimaryKey("PK_UserInvite", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -263,7 +263,7 @@ namespace Users.Database.Migrations.UserDb
                 schema: "users");
 
             migrationBuilder.DropTable(
-                name: "UserRegistration",
+                name: "UserInvite",
                 schema: "users");
 
             migrationBuilder.DropTable(

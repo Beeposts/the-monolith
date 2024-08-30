@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Shared;
 using Shared.Databases;
+using Shared.Domains;
 using Shared.Models;
 
 namespace Users.Database.DataSeed;

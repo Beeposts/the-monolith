@@ -1,10 +1,10 @@
 namespace Users.Domain;
 
-public enum UserRegistrationStatusReason
+public enum UserInviteStatusReason
 {
     Created = 10,
     Invited = 40,
-    Confirmed = 41,
     Registered = 70,
+    Expired = 75,
     Rejected = 79
 }

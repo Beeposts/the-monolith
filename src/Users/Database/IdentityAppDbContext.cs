@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Shared.Domains;
 using Shared.Models;
 
 namespace Users.Database;

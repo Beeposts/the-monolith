@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Shared.Databases;
+using Shared.Domains;
 using Shared.Models;
 using Users.Database;
 
