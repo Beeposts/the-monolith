@@ -48,7 +48,7 @@ public class UserModule : IModuleRegister
     {
         endpoints.MapApiClientEndpoints();
         endpoints.MapUserEndpoints();
-
+        endpoints.MapTenantsEndpoints();
     }
 
     public void UseModule(IApplicationBuilder app)
