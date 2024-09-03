@@ -6,6 +6,7 @@ using Shared.Domains;
 using Users.Database;
 using Users.Domain;
 using Users.StateMachines;
+using Users.UseCases.Tenants;
 
 namespace Users.UseCases.Users.RegisterUsers;
 
@@ -61,6 +62,16 @@ public class RegisterUserHandler : IRequestHandler<RegisterUserRequest, Result>
             
             return Result.Invalid(errors);
         }
+
+        var identityUser = await _userManager.FindByEmailAsync(invitationData.Email);
+        var user = new User
+        {
+            Email = invitationData.Email,
+            IdentityId = identityUser!.Id
+        };
+        
+        await _dbContext.User.AddAsync(user, cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
         
         const UserInviteStatusReason registeredStatus = UserInviteStatusReason.Registered;
         if (!stateMachine.CanFire(registeredStatus))
@@ -74,6 +85,13 @@ public class RegisterUserHandler : IRequestHandler<RegisterUserRequest, Result>
         
         await _dbContext.SaveChangesAsync(cancellationToken);
 
+        if (invitationData.InvitedByUserId is not null && invitationData.InvitedByTenantId is not null)
+        {
+            await _sender.Send(new AddUserToTenantRequest(user.Id, invitationData.InvitedByTenantId.Value), cancellationToken);
+            return Result.Success();
+        }
+        
+        await _sender.Send(new GenerateDefaultTenant(user.Id), cancellationToken);
         return Result.Success();
     }
     

@@ -4,7 +4,7 @@ namespace Users.Domain;
 public record Tenant : Entity
 {
     public required string Name { get; set; }
-    public required string Slug { get; set; }
+    public required Guid Slug { get; set; }
     public List<User>? Users { get; set; }
 }
 

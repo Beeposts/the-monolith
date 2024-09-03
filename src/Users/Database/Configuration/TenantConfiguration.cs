@@ -13,7 +13,6 @@ internal class TenantConfiguration : IEntityTypeConfiguration<Tenant>
             .IsRequired();
 
         builder.Property(x => x.Slug)
-            .HasMaxLength(TenantSpecification.SlugMaxLength)
             .IsRequired();
 
         builder.HasIndex(x => new { x.Slug })

@@ -70,7 +70,7 @@ internal class TenantResolver : ITenantResolver
                 return Result.Unauthorized();
             
             _tenantSession.SetTenantId(tenant.Id);
-            _tenantSession.SetSlug(slug);
+            _tenantSession.SetSlug(slug.Value);
             return tenant.Id;
         }
         
@@ -111,8 +111,12 @@ internal class TenantResolver : ITenantResolver
         return tenant?.Id;
     }
 
-    private string? GetTenantSlugInHttpHeader()
+    private Guid? GetTenantSlugInHttpHeader()
     {
-        return _httpContextAccessor?.HttpContext?.Request?.Headers[TenantHeader];
+        var slug = _httpContextAccessor?.HttpContext?.Request?.Headers[TenantHeader];
+        if (slug is null)
+            return null;
+
+        return Guid.TryParse(slug.Value, out var result) ? result : null;
     }
 }

@@ -16,7 +16,18 @@ internal class TenantSession : ITenantSession
     }
 
     public int? TenantId => OverrideTenantId ?? _httpContextAccessor.HttpContext?.Session.GetInt32(TenantIdSessionKey);
-    public string? Slug => _httpContextAccessor.HttpContext?.Session.GetString(TenantSlugSessionKey);
+    public Guid? Slug
+    {
+        get
+        {
+            var slugSession= _httpContextAccessor.HttpContext?.Session.GetString(TenantSlugSessionKey);
+
+            if (slugSession is null)
+                return null;
+            
+            return Guid.TryParse(slugSession, out var result) ? result : null;
+        }
+    }
 
     public void SetTenantId(int tenantId)
     {
@@ -26,8 +37,8 @@ internal class TenantSession : ITenantSession
             OverrideTenantId = tenantId;
     }
     
-    public void SetSlug(string slug)
+    public void SetSlug(Guid slug)
     {
-        _httpContextAccessor.HttpContext?.Session?.SetString(TenantSlugSessionKey, slug);
+        _httpContextAccessor.HttpContext?.Session?.SetString(TenantSlugSessionKey, slug.ToString());
     }
 }
