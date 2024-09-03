@@ -60,7 +60,7 @@ namespace Users.Database.Migrations.UserDb
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    Slug = table.Column<string>(type: "character varying(130)", maxLength: 130, nullable: false)
+                    Slug = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {

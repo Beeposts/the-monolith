@@ -165,10 +165,8 @@ namespace Users.Database.Migrations.UserDb
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<string>("Slug")
-                        .IsRequired()
-                        .HasMaxLength(130)
-                        .HasColumnType("character varying(130)");
+                    b.Property<Guid>("Slug")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 

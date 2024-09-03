@@ -18,7 +18,18 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Database\Migrations\UserDb\" />
+      <Compile Remove="Database\Migrations\UserDb\**" />
+      <Compile Include="Database\Migrations\UserDb\20240903173416_Initial.cs" />
+      <Compile Include="Database\Migrations\UserDb\20240903173416_Initial.Designer.cs" />
+      <Compile Include="Database\Migrations\UserDb\UserDbContextModelSnapshot.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="Database\Migrations\UserDb\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Database\Migrations\UserDb\**" />
     </ItemGroup>
 
 </Project>

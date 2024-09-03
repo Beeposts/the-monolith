@@ -36,7 +36,11 @@ public class UserModule : IModuleRegister
         services.AddDbContext<UserDbContext>(options =>
         {
             options.UseNpgsql(connectionString,
-                x => { x.MigrationsHistoryTable(HistoryRepository.DefaultTableName, UserConsts.SchemaName); });
+                x =>
+                {
+                    x.MigrationsHistoryTable(HistoryRepository.DefaultTableName, UserConsts.SchemaName);
+                    x.MigrationsAssembly(typeof(UserModule).Assembly.GetName().Name);
+                });
         });
 
         services.AddScoped<ITenantSession, TenantSession>();
