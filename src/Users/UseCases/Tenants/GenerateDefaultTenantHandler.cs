@@ -21,12 +21,6 @@ public class GenerateDefaultTenantHandler : IRequestHandler<GenerateDefaultTenan
     
     public async ValueTask<Result<TenantModel>> Handle(GenerateDefaultTenant request, CancellationToken cancellationToken)
     {
-        var tenant = new Tenant
-        {
-            Name = "Default",
-            Slug = NewId.NextSequentialGuid()
-        };
-
         var user = await _dbContext.User.FirstOrDefaultAsync(x => x.Id == request.UserId, cancellationToken);
         
         if(user is null)
@@ -34,7 +28,14 @@ public class GenerateDefaultTenantHandler : IRequestHandler<GenerateDefaultTenan
             return Result.NotFound("User not found.");
         }
         
-        user.Tenants.Add(tenant);
+        var tenant = new Tenant
+        {
+            Name = UserConsts.DefaultTenantName,
+            Slug = NewId.NextSequentialGuid(),
+            Users = [user]
+        };
+        
+        await _dbContext.Tenant.AddAsync(tenant, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
         
         return new TenantModel(tenant.Id, tenant.Name, tenant.Slug);
